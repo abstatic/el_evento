@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 var mongo = require('mongodb');
 // var monk = require('monk');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/elevento_db');
+mongoose.connect('mongodb://localhost/elevento_db'); // this is the name of mongoDB database
 // var db = monk('localhost:27017/elevento_db');
 var db = mongoose.connection;
 
