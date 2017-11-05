@@ -1,9 +1,12 @@
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var express = require('express');
-var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+var passport = require('passport');
+var path = require('path');
+var session = require('express-session');
+var flash = require('connect-flash');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -24,19 +27,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // MongoDB code
 var mongo = require('mongodb');
-// var monk = require('monk');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/elevento_db'); // this is the name of mongoDB database
-// var db = monk('localhost:27017/elevento_db');
 var db = mongoose.connection;
-
-
 
 // middleware for DB
 app.use(function(req, res, next) {
   req.db = db;
   next();
 });
+
+// required for passport
+app.use(session({ secret: 'flysolo' })); // session secret value
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
 
 app.use('/', index);
 app.use('/users', users);

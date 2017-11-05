@@ -1,0 +1,51 @@
+extends layout
+
+block content
+  div.row
+    // Nav tabs
+    div.col-md-4.col-md-offset-4
+      ul.nav.nav-tabs(role='tablist')
+        li.active(role='presentation')
+          a(href='#login', aria-controls='home', role='tab', data-toggle='tab') Login
+        li(role='presentation')
+          a(href='#register', aria-controls='profile', role='tab', data-toggle='tab') Register
+      // Tab panes
+      .tab-content
+        div#login.tab-pane.active(role='tabpanel')
+          h1 #{title}
+          br
+          form.form-horizontal(name="login", method="post", action="/login")
+            .form-group
+              label.col-sm-2.control-label(for='inputEmail') Email
+              .col-sm-10
+                input#inputEmail.form-control(type='email', placeholder='Email', name='userEmail')
+            .form-group
+              label.col-sm-2.control-label(for='inputPassword') Password
+              .col-sm-10
+                input#inputPassword.form-control(type='password', placeholder='Password', name='userPassword')
+            .form-group
+              .col-sm-offset-2.col-sm-10
+                button.btn.btn-default(type='submit') Sign in
+        #register.tab-pane(role='tabpanel')
+          h1 Register
+          br
+          form.form-horizontal(name="register", method="post", action="/register")
+            .form-group
+              label.col-sm-2.control-label(for='inputEmail') Email
+              .col-sm-10
+                input#inputEmail.form-control(type='email', placeholder='Email', name='userEmail')
+            .form-group
+              label.col-sm-2.control-label(for='inputUsername') Username
+              .col-sm-10
+                input#inputUsername.form-control(type='text', placeholder='Username', name='userUsername')
+            .form-group
+              label.col-sm-2.control-label(for='inputPassword') Password
+              .col-sm-10
+                input#inputPassword.form-control(type='password', placeholder='Password', name='userPassword')
+            .form-group
+              label.col-sm-2.control-label(for='inputPassword2') Confirm Password
+              .col-sm-10
+                input#inputPassword2.form-control(type='password', placeholder='Confirm Password', name='userPassword2')
+            .form-group
+              .col-sm-offset-2.col-sm-10
+                button.btn.btn-default(type='submit') Register

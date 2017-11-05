@@ -23,8 +23,8 @@ router.get('/userlist', function(req, res) {
 });
 
 // GET New user page
-router.get('/register', function(req, res) {
-  res.render('register', { title: 'Add New User' });
+router.get('/login', function(req, res) {
+  res.render('login', { title: 'Login', language: 'Jade' });
 });
 
 // POST to register user service
@@ -62,5 +62,10 @@ router.post('/adduser', function(req, res) {
     }); // end insert collection
   }); // end pass hash async
 }); // end POST
+
+// POST TO ADD EVENT
+router.post('/addevent', function(req, res) {
+
+});
 
 module.exports = router;
