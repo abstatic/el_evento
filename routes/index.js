@@ -1,14 +1,17 @@
 var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcrypt');
+var passport = require('passport');
+
+var Event = require('../models/events.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Home', user: req.user });
 });
 
-router.get('/helloworld', function(req, res) {
-  res.render('helloworld', { title: 'ERROR, USERNAME EXISTS', error: '' });
+router.get('/helloworld', isLoggedIn, function(req, res) {
+  res.render('helloworld', { title: 'ERROR, USERNAME EXISTS', user: req.user });
 });
 
 // get userlist page
@@ -24,48 +27,75 @@ router.get('/userlist', function(req, res) {
 
 // GET New user page
 router.get('/login', function(req, res) {
-  res.render('login', { title: 'Login', language: 'Jade' });
+  res.render('login', { title: 'Login', message: req.flash('errMsg'), user: req.user });
 });
+
+// POST to /login for logging in the user
+router.post('/login', passport.authenticate('local-login', {
+  successRedirect: '/helloworld',
+  failureRedirect: '/login',
+  failureFlash: true
+}));
 
 // POST to register user service
-router.post('/adduser', function(req, res) {
+router.post('/register', passport.authenticate('local-signup', {
+  successRedirect: '/',
+  failureRedirect: '/login',
+  failureFlash: true
+})); // end POST
 
-  // Set our DB variable
-  var db = req.db;
-
-  // Get the form values, depend on the "name" attributes of form
-  var userName = req.body.username;
-  var userPassword = req.body.userpassword;
-  var userEmail = req.body.useremail;
-
-
-  // Set our collection into which we insert data
-  var collection = db.get('user_table');
-
-  // asynchronously hash the password and store it inside DB
-  bcrypt.hash(userPassword, 10, function(err, passHash) {
-
-    // Submit to the DB for inserting
-    collection.insert({
-      "u_id": userName,
-      "email": userEmail,
-      "password": passHash
-    }, function(err, doc) {
-      if (err) {
-        // if it failed, return error
-        res.send("There was a problem in adding the information to the database.");
-      }
-      else {
-        // and forward to success page
-        res.redirect("userlist");
-      }
-    }); // end insert collection
-  }); // end pass hash async
-}); // end POST
-
-// POST TO ADD EVENT
-router.post('/addevent', function(req, res) {
-
+// GET TO ADD EVENT
+router.get('/addevent', isLoggedIn, function(req, res) {
+  res.render('addevent', { title: 'Add event', user: req.user });
 });
+//
+// POST TO ADD EVENT
+router.post('/addevent', isLoggedIn, function(req, res) {
+
+  Event.findOne({ 'eventName': req.eventname }, function(err, event) {
+    if (err)
+      return done(err);
+
+    // check if the event exists
+    if (event) {
+      res.render('addevent', { title: 'Add event', user: req.user, message: 'Another event with the same name exists' });
+    }
+  });
+
+  var newEvent = new Event();
+  newEvent.eventName = req.body.eventname;
+  newEvent.location = req.body.eventlocation;
+  newEvent.date = new Date();
+  newEvent.capacity = req.body.eventcapacity;
+  newEvent.author = req.user.email;
+  newEvent.contact = req.body.eventcontact;
+
+  // // save the user to the database
+  newEvent.save(function(err) {
+    if (err) { 
+      // res.render('addevent', { title: 'Add event', user: req.user, message: 'Failed to add event' });
+      console.log("NOT SAVE");
+      console.log(err);
+    } else {
+      // res.render('addevent', { title: 'Add event', user: req.user, message: 'Event created successfully' });
+      console.log("SAVED");
+    }
+  });
+});
+
+router.get('/logout', function(req, res) {
+  req.logout();
+  res.redirect('/');
+});
+
+function isLoggedIn(req, res, next) {
+
+  // if user is authenticated in the session, carry on
+  if (req.isAuthenticated())
+    return next();
+
+  // if they aren't redirect them to the home page
+  res.redirect('/');
+}
 
 module.exports = router;

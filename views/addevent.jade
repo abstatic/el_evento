@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  .col-md-6
+    // THE START
+    form.form-horizontal(name='addevent', method='post', action='/addevent')
+      .form-group
+        label.col-sm-4.control-label(for='eventname') What's happening ?
+        .col-sm-8
+          input#eventname.form-control(type='text', placeholder='Event Name', name='eventname')
+      .form-group
+        label.col-sm-4.control-label(for='eventlocation') Where ?
+        .col-sm-8
+          input#eventlocation.form-control(type='text', placeholder='Location', name='eventlocation')
+      .form-group
+        label.col-sm-4.control-label(for='eventcapacity') Full limit
+        .col-sm-8
+          input#eventcapacity.form-control(type='text', placeholder='Capacity', name='eventcapacity')
+      .form-group
+        label.col-sm-4.control-label(for='eventdatetime') When ?
+        .col-sm-8
+          input#eventdatetime.form-control(type='text', placeholder='Event Date', name='eventdatetime')
+      .form-group
+        label.col-sm-4.control-label(for='eventcontact') Contact Person ?
+        .col-sm-8
+          input#eventcontact.form-control(type='text', placeholder='eventcontact')
+      .form-group
+        .col-sm-offset-4.col-sm-8
+          button.btn.btn-default.btn-success(type='submit') Create Event!
+  // THE END
