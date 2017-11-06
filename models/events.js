@@ -3,12 +3,13 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var eventSchema = new Schema({
-  eventName: { type: String, unique: true, index: true },
-  location: { type: String},
+  eventName: { type: String, required: true, unique: true, index: true },
+  location: { type: String, required: true },
   date: { type: Date, required: true },
   capacity: { type: Number },
   author: { type: String, required: true },
-  contact: { type: String }
+  contact: { type: String },
+  going: [String]
 });
 
 // create a model using this schema

@@ -1,0 +1,34 @@
+- var idx = 0
+extends layout
+
+block content
+  .row
+    each event in data
+      .col-md-3
+        .panel.panel-default
+          .panel-heading #{event.eventName}
+          .panel-body
+          ul.list-unstyled
+            li 
+              i.glyphicon.glyphicon-map-marker 
+              | #{event.location}
+            li 
+              i.glyphicon.glyphicon-calendar
+              | #{event.date}
+            li 
+              i.glyphicon.glyphicon-user
+              | #{event.capacity}
+            li 
+              i.glyphicon.glyphicon-phone-alt
+              | #{event.contact}
+          if (typeof(user) != 'undefined')
+            if (event.author == user.email)
+              a(href='/deleteevent?name='+event.eventName class='btn btn-danger') Delete Event
+            if (event.reg == '')
+              b Registered
+            else
+              br
+              b.text-success Already Registered
+
+
+

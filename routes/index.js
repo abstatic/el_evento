@@ -44,6 +44,13 @@ router.post('/register', passport.authenticate('local-signup', {
   failureFlash: true
 })); // end POST
 
+// GET TO VIEW ALL EVENTS
+router.get('/viewevents', function(req, res) {
+  Event.find({}, function(err, events) {
+    res.render('viewevent', { title: 'Available Events', 'data': events, user: req.user });
+  });
+});
+
 // GET TO ADD EVENT
 router.get('/addevent', isLoggedIn, function(req, res) {
   res.render('addevent', { title: 'Add event', user: req.user });
@@ -73,12 +80,10 @@ router.post('/addevent', isLoggedIn, function(req, res) {
   // // save the user to the database
   newEvent.save(function(err) {
     if (err) { 
-      // res.render('addevent', { title: 'Add event', user: req.user, message: 'Failed to add event' });
-      console.log("NOT SAVE");
+      res.render('addevent', { title: 'Add event', user: req.user, message: 'Failed to add event' });
       console.log(err);
     } else {
-      // res.render('addevent', { title: 'Add event', user: req.user, message: 'Event created successfully' });
-      console.log("SAVED");
+      res.render('addevent', { title: 'Add event', user: req.user, message: 'Event created successfully' });
     }
   });
 });
