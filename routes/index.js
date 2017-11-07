@@ -7,21 +7,9 @@ var Event = require('../models/events.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Home', user: req.user });
-});
-
-router.get('/helloworld', isLoggedIn, function(req, res) {
-  res.render('helloworld', { title: 'ERROR, USERNAME EXISTS', user: req.user });
-});
-
-// get userlist page
-router.get('/userlist', function(req, res) {
-  var db = req.db;
-  var collection = db.get('user_table');
-  collection.find({}, {}, function(e, docs) {
-    res.render('userlist', {
-      "userlist": docs
-    });
+  Event.find({}, function(err, events) {
+    
+    res.render('viewevent', { title: 'Available Events', 'data': events, user: req.user });
   });
 });
 
@@ -32,7 +20,7 @@ router.get('/login', function(req, res) {
 
 // POST to /login for logging in the user
 router.post('/login', passport.authenticate('local-login', {
-  successRedirect: '/helloworld',
+  successRedirect: '/viewevents',
   failureRedirect: '/login',
   failureFlash: true
 }));
@@ -44,9 +32,12 @@ router.post('/register', passport.authenticate('local-signup', {
   failureFlash: true
 })); // end POST
 
+// get endpoint for deleting
+
 // GET TO VIEW ALL EVENTS
 router.get('/viewevents', function(req, res) {
   Event.find({}, function(err, events) {
+    
     res.render('viewevent', { title: 'Available Events', 'data': events, user: req.user });
   });
 });
@@ -55,7 +46,7 @@ router.get('/viewevents', function(req, res) {
 router.get('/addevent', isLoggedIn, function(req, res) {
   res.render('addevent', { title: 'Add event', user: req.user });
 });
-//
+
 // POST TO ADD EVENT
 router.post('/addevent', isLoggedIn, function(req, res) {
 
@@ -85,6 +76,21 @@ router.post('/addevent', isLoggedIn, function(req, res) {
     } else {
       res.render('addevent', { title: 'Add event', user: req.user, message: 'Event created successfully' });
     }
+  });
+});
+
+// GET endpoint for deleting an event
+router.get('/deleteevent', isLoggedIn, function(req, res) {
+
+  var ename = req.query.name;
+
+  console.log(ename);
+  Event.findOne({eventName: ename}, function(err, doc) {
+    if (err)
+      console.log(err);
+    if (doc)
+      doc.remove();
+    res.redirect('/viewevents');
   });
 });
 
