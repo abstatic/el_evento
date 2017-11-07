@@ -9,7 +9,7 @@ var eventSchema = new Schema({
   capacity: { type: Number },
   author: { type: String, required: true },
   contact: { type: String },
-  going: [String]
+  registered: [String]
 });
 
 // create a model using this schema

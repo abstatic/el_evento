@@ -7,10 +7,11 @@ var Event = require('../models/events.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  Event.find({}, function(err, events) {
+  res.render('index', { title: 'Home page' });
+  // Event.find({}, function(err, events) {
     
-    res.render('viewevent', { title: 'Available Events', 'data': events, user: req.user });
-  });
+    // res.render('viewevent', { title: 'Available Events', 'data': events, user: req.user });
+  // });
 });
 
 // GET New user page
@@ -94,6 +95,63 @@ router.get('/deleteevent', isLoggedIn, function(req, res) {
   });
 });
 
+// get for registering to an event
+router.get('/registerevent', isLoggedIn, function(req, res) {
+
+  var ename = req.query.name;
+
+  Event.findOne({eventName: ename}, function(err, doc) {
+    if (err)
+      console.log(err);
+    if (doc)
+        doc.registered.push(req.user.email);
+    doc.save(function(err) {
+      if (err) { 
+        console.log(err);
+      } else {
+        res.redirect('/viewevents');
+      }
+    });
+  });
+});
+
+// try to cancel the registration
+router.get('/cancelregister', isLoggedIn, function(req, res) {
+  var ename = req.query.name;
+
+  Event.findOne({eventName: ename}, function(err, doc) {
+    if (err)
+      console.log(err);
+    if (doc)
+      doc.registered.pull(req.user.email);
+    doc.save(function(err) {
+      if (err) { 
+        console.log(err);
+      } else {
+        res.redirect('/viewevents');
+      }
+    });
+  });
+});
+
+// get for viewing the calendar
+router.get('/viewcalendar', isLoggedIn, function(req, res) {
+  Event.find({}, function(err, events) {
+    
+    res.render('viewcalendar', { title: 'View Calendar', 'data': events, user: req.user });
+  });
+});
+
+//get for returning the events json
+router.get('/vieweventsjson', function(req, res) {
+  Event.find({}, 'eventName date', function(err, events) {
+    
+    res.send(events);
+  });
+});
+
+
+// logout
 router.get('/logout', function(req, res) {
   req.logout();
   res.redirect('/');

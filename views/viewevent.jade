@@ -1,4 +1,5 @@
 - var idx = 0
+- var found = "false"
 extends layout
 
 block content
@@ -23,13 +24,15 @@ block content
               i.glyphicon.glyphicon-phone-alt
               | #{event.contact}
           if (typeof(user) != 'undefined')
+            each email in event.registered
+              if (email == user.email)
+                -found = "true"
+            if (found == "true")
+              a(href='/cancelregister?name='+event.eventName) Cancel Registration
+            else
+              a(href='/registerevent?name='+event.eventName) Register Now!
+            br
+            br
             if (event.author == user.email)
               a(href='/deleteevent?name='+event.eventName class='btn btn-danger') Delete Event
-            if (event.reg == '')
-              b Registered
-            else
               br
-              b.text-success Already Registered
-
-
-
