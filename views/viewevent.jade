@@ -33,7 +33,7 @@ block content
                 -found_pending = "true"
             if (found_registered == "true")
               a.text-danger(href='/cancelregister?name='+event.eventName) Cancel Registration
-              -found = "false"
+              -found_registered = "false"
             else if (found_pending == "true")
               a.text-warning(href='#') Pending Registration
               -found_pending = "false"
