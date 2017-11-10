@@ -1,16 +1,20 @@
 $(document).ready(function() {
 
     // page is now ready, initialize the calendar...
-    var data;
-    data = $.get("/vieweventsjson", function(data1, status) {
-      return data1;
-    });
+   var data; var x;
+    data = $.getJSON("/vieweventsjson", function(data1, ) {
 
-    alert(data[0]);
+      var events=[];
+      console.log("hi");
+      for (var key in data1) {
+      	var x = new Date(data1[key].date);
 
+  events.push({title: data1[key].eventName , start: x})
 
-    $('#calendar').fullCalendar({
-        // put your options and callbacks here
-    })
+}
 
+      $('#calendar').fullCalendar({
+  events: events}
+    );
+});
 });

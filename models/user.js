@@ -8,7 +8,7 @@ var userSchema = new Schema({
   passHash: { type: String, required: true },
   email: { type: String, required: true, unique: true, index: true, lowercase: true },
   created_at: Date,
-  events: [String]
+  pending_requests: [{e_name: {type: String}, u_email: {type:String}}]
 });
 
 // schema methods

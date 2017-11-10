@@ -9,6 +9,7 @@ var eventSchema = new Schema({
   capacity: { type: Number },
   author: { type: String, required: true },
   contact: { type: String },
+  pending: [String],
   registered: [String]
 });
 

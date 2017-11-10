@@ -6,11 +6,18 @@ html
     link(rel='stylesheet', href='/css/bootstrap.css')
     link(rel='stylesheet', href='/css/style.css')
     link(rel='stylesheet', href='/css/fullcalendar.css')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css')
+
     script(src='/js/jquery.js')
     script(src='/js/moment.min.js')
     script(src='/js/fullcalendar.js')
     script(src='/js/bootstrap.js')
     script(src='/js/script.js')
+    script(src='/js/datepick.js')
+    script(src='http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js')
+    script(src='http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/js/bootstrap-datetimepicker.min.js')
+
+    
   body
     .navbar.navbar-inverse.navbar-fixed-top(role='navigation')
       .container-fluid
@@ -24,10 +31,8 @@ html
         .collapse.navbar-collapse
           ul.nav.navbar-nav
             if (typeof(user) != 'undefined')
-              li.active
-                a(href='/') Home
               li
-                a(href='/about') About
+                a(href='/') Home
               li
                 a(href='/viewcalendar') View Calendar
               li
@@ -37,10 +42,8 @@ html
               li
                 a(href='/acceptrequest') Accept Requests
             else
-              li.active
-                a(href='/') Home
               li
-                a(href='/about') About
+                a(href='/') Home
               li
                 a(href='/login') Login
               li

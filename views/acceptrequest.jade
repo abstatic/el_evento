@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1= title
+  #{data}
+  p Pending Requests
+  table.table
+    tr
+      td Event Name
+      td Requestor Email
+      td Accept/Reject
+    each request in data
+      tr
+        td= request.e_name
+        td= request.u_email
+        td
+          a.text-success(href='/takeaction?action=accept&event='+request.e_name+'&email='+request.u_email) Accept 
+          a.text-danger(href='/takeaction?action=reject&event='+request.e_name+'&email='+request.u_email) Reject
